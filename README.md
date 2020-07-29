@@ -1,5 +1,5 @@
 # PRU_Workshop_Jan_2020
-Notes from PRU workshop and hands-on by Jason Kridner at GeorgiaTech on January 30th 2020
+Notes from PRU workshop and hands-on by Jason Kridner at GeorgiaTech on January 30th 2020. All examples and PRU codes are from the Techab folder on the Beaglebone Pocket images. 
 
 ## Preliminary notes
 
@@ -19,7 +19,7 @@ __AnalogIn.pru0.c__ is a very usefull example that uses the PRU with the ADC of 
 
 ### analogIn.pru0.c
 This examples uses the PRU to sample the ADC of the Board, the samples are then sent back to the ARM using rpmsg transport structure. The code is located under `/var/lib/cloud9/PocketBeagle/TechLab/.challenges`, it won't compile and need some modifications:
- 1. Take the following the files in the [include folder](analog_in/include) and place them under `/var/lib/cloud9/common`, they are files required to compile the example and that are not initially included in the example. 
+ 1. Take the following the files in the [include folder](analogIn_example/include) and place them under `/var/lib/cloud9/common`, they are files required to compile the example and that are not initially included in the example. 
  2. Now you can compile, place and start the code on the PRU. As for the other examples it is done with (__Do NOT include the `.c` in the command__):
   ```
   cd /var/lib/cloud9/PocketBeagle/TechLab/.challenges
@@ -27,7 +27,7 @@ This examples uses the PRU to sample the ADC of the Board, the samples are then 
   ```
  3. After compilation you won't see much happening, that's normal. However, you can check with `cat /sys/class/remoteproc/remoteproc1/state` that PRU0 running and sending the ADC measurement to the rpmsg device character on the ARM-Cortex. Now we need to read this device character. 
  4. Retrieving data on the ARM-Cortex:
-    1. copy the 2 files: [deploy_arm.sh](analog_in/deploy_arm.sh) and [rpmsg_from_user_space.c](analog_in/rpmsg_from_user_space.c), in the directory `/var/lib/cloud9/PocketBeagle/TechLab/.challenges`
+    1. copy the 2 files: [deploy_arm.sh](analogIn_example/deploy_arm.sh) and [rpmsg_from_user_space.c](analogIn_example/rpmsg_from_user_space.c), in the directory `/var/lib/cloud9/PocketBeagle/TechLab/.challenges`
     2. You can modify `rpmsg_from_user_space.c` by commenting and uncommenting Option 1 and 2 in order to either read 10 samples and stop or continously read the samples received from the PRU.
     2. To deploy the ARM code, just run:  `sh deploy.sh`
     
