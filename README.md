@@ -1,8 +1,6 @@
 # PRU_Workshop_Jan_2020
 Notes from PRU workshop and hands-on by Jason Kridner at GeorgiaTech on January 30th 2020
 
-For more information please see the readme
-
 ## Preliminary notes
 
 This has been tested on the following images:
@@ -10,7 +8,9 @@ This has been tested on the following images:
 - July 28th 2020:  [bone-debian-10.3-iot-armhf-2020-04-06-4gb.img](https://beagleboard.org/latest-images)
 - February 18th 2020: [pru-workshop-2020-01-30.img](http://debian.beagleboard.org/images/pru-workshop-2020-01-30.img.xz)
 
-To try other images you can find the latest images [here](http://debian.beagleboard.org/images/)
+To try other images you can find the latest images [here](http://beagleboard.org/latest-images)
+
+This is supposed to run on the [Beaglebone Pocket](http://beagleboard.org/pocket) mounted on the [TechLab board](https://beagleboard.org/capes/techlab). But they can be easily adapted on Beaglebone Black as the two boards run on TI chip.
 
 ## PRU examples in the Tech lab folder
  
@@ -18,10 +18,20 @@ Allow the examples are located under `/var/lib/cloud9/PocketBeagle/TechLab`.
 __AnalogIn.pru0.c__ is a very usefull example that uses the PRU with the ADC of the board. The others examples are simpler and more designed to test that everything is working correctly. You can find much more information
 
 ### analogIn.pru0.c
-This examples uses the PRU to sample the ADC of the Board, the samples are then sent back to the ARM using __TO COMPLETE __ 
- 
- 
- 
+This examples uses the PRU to sample the ADC of the Board, the samples are then sent back to the ARM using rpmsg transport structure. The code is located under `/var/lib/cloud9/PocketBeagle/TechLab/.challenges`, it won't compile and need some modifications:
+ 1. Take the following the files in the [include folder](analog_in/include) and place them under `/var/lib/cloud9/common`, they are files required to compile the example and that are not initially included in the example. 
+ 2. Now you can compile, place and start the code on the PRU. As for the other examples it is done with (__Do NOT include the `.c` in the command__):
+  ```
+  cd /var/lib/cloud9/PocketBeagle/TechLab/.challenges
+  make -f ../../../common/Makefile TARGET=analogIn.pru0
+  ```
+ 3. After compilation you won't see much happening, that's normal. However, you can check with `cat /sys/class/remoteproc/remoteproc1/state` that PRU0 running and sending the ADC measurement to the rpmsg device character on the ARM-Cortex. Now we need to read this device character. 
+ 4. Retrieving data on the ARM-Cortex:
+    1. copy the 2 files: [deploy_arm.sh](analog_in/deploy_arm.sh) and [rpmsg_from_user_space.c](analog_in/rpmsg_from_user_space.c), in the directory `/var/lib/cloud9/PocketBeagle/TechLab/.challenges`
+    2. You can modify `rpmsg_from_user_space.c` by commenting and uncommenting Option 1 and 2 in order to either read 10 samples and stop or continously read the samples received from the PRU.
+    2. To deploy the ARM code, just run:  `sh deploy.sh`
+    
+
  
 ### sleep.pru0.c
 This is a good example to set a PRU to idle when we are not using it. If we have started any other code on the PRU before running this example will kill it. To run this example from the `TechLab/` folder run: 
