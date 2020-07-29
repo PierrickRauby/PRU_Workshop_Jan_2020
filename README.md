@@ -29,7 +29,8 @@ This examples uses the PRU to sample the ADC of the Board, the samples are then 
  4. Retrieving data on the ARM-Cortex:
     1. copy the 2 files: [deploy_arm.sh](analogIn_example/deploy_arm.sh) and [rpmsg_from_user_space.c](analogIn_example/rpmsg_from_user_space.c), in the directory `/var/lib/cloud9/PocketBeagle/TechLab/.challenges`
     2. You can modify `rpmsg_from_user_space.c` by commenting and uncommenting Option 1 and 2 in order to either read 10 samples and stop or continously read the samples received from the PRU.
-    2. To deploy the ARM code, just run:  `sh deploy.sh`
+    3. To deploy the ARM code, just run:  `sh deploy.sh`
+    4. Note that the ADC is connected to the light sensor and not the accelerometer. 
     
 
  
